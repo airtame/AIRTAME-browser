@@ -1,0 +1,14 @@
+[Unit]
+Description=AIRTAME Browser
+After=network.target
+
+[Service]
+Type=simple
+#CPUSchedulingPolicy=rr
+Nice=-10
+WorkingDirectory=/opt/airtame-browser/
+ExecStart=/opt/airtame-browser/airtame-browser -f -platform linuxfb
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
