@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <QtWidgets>
+#include <QLocalSocket>
 #include "window.h"
 
 int main(int argc, char *argv[])
@@ -14,6 +15,9 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription("AIRTAME Browser");
     parser.addHelpOption();
     parser.addVersionOption();
+    QCommandLineOption urlOption("u", QCoreApplication::translate("main", "URL to load on start"), QCoreApplication::translate("main", "url"));
+    parser.addOption(urlOption);
+
     QCommandLineOption fullscreenOption("f",QCoreApplication::translate("main", "Set browser to be full screen"));
     parser.addOption(fullscreenOption);
 
@@ -23,8 +27,12 @@ int main(int argc, char *argv[])
     /* Setup the window */
     Window window;
     window.setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-    
-    window.setUrl(QUrl(argv[1]));
+    if (parser.isSet(urlOption)) {
+        window.setUrl(QUrl(parser.value(urlOption)));
+    } else {
+        window.setUrl(QUrl("http://www.airtame.com"));
+    }
+
     if (fullscreen) {
         window.showFullScreen();
     } else {
