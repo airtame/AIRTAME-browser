@@ -26,7 +26,7 @@ void BrowserApplication::_readSocket() {
     foreach(QString line, pieces) {
         QStringList vals = line.split(" ");
         if (vals.at(0) == "URL" && vals.length() > 1) {
-            qDebug() << "Got URL: " << vals.at(1);
+            qDebug() << "Changing URL to: " << vals.at(1);
             w->setUrl(vals.at(1));
         }
 
@@ -38,8 +38,6 @@ void BrowserApplication::_readSocket() {
 void BrowserApplication::_newLocalConnection() {
     QLocalSocket *socket = _localServer->nextPendingConnection();
     if(socket) {
-        printf("New socket connection!\n");
-
         connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
         connect(socket, SIGNAL(readyRead()), this , SLOT(_readSocket()));
     }
