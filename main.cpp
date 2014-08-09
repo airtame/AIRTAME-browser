@@ -1,12 +1,13 @@
 #include <unistd.h>
 #include <QtWidgets>
 #include <QLocalSocket>
+#include "browser.h"
 #include "window.h"
 
 int main(int argc, char *argv[])
 {
     /* Initialize the application */
-    QApplication app(argc, argv);
+    BrowserApplication app(argc, argv);
     QCoreApplication::setApplicationName("airtame-browser");
     QCoreApplication::setApplicationVersion("1.0");
 
@@ -38,5 +39,9 @@ int main(int argc, char *argv[])
     } else {
         window.show();
     }
+
+    /* Give the window ref to the app */
+    app.w = &window;
+    /* Execute the app */
     return app.exec();
 }

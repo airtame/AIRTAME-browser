@@ -1,6 +1,8 @@
 QT       += webkitwidgets network widgets
 FORMS     = window.ui
-HEADERS   = window.h
+HEADERS   = window.h \
+    browser.h
 SOURCES   = main.cpp \
-            window.cpp
+            window.cpp \
+    browser.cpp
 
