@@ -15,7 +15,11 @@ AIRTAME Browser
 %prep
 
 %build
+if [ -f "Makefile" ]; then
+	rm -rf Makefile
+fi;
 qmake -config release
+make
 
 %install
 install -d %{buildroot}/opt/airtame-browser/
