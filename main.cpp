@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     /* Initialize the application */
     BrowserApplication app(argc, argv);
     QCoreApplication::setApplicationName("airtame-browser");
-    QCoreApplication::setApplicationVersion("1.0");
+    QCoreApplication::setApplicationVersion("1.1");
 
     /* Parse the cmdline arguments */
     QCommandLineParser parser;
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     if (parser.isSet(urlOption)) {
         window.setUrl(QUrl(parser.value(urlOption)));
     } else {
-        window.setUrl(QUrl("http://www.airtame.com"));
+        window.setUrl(QUrl("http://localhost/splash/redir.php"));
     }
 
     if (fullscreen) {
