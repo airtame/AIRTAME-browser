@@ -14,3 +14,8 @@ void Window::setUrl(const QUrl &url)
 {
     webView->setUrl(url);
 }
+
+void Window::evalJS(const QString jscmd)
+{
+    webView->page()->mainFrame()->evaluateJavaScript(jscmd);
+}

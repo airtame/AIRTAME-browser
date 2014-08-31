@@ -29,7 +29,11 @@ void BrowserApplication::_readSocket() {
             qDebug() << "Changing URL to: " << vals.at(1);
             w->setUrl(vals.at(1));
         }
-
+	// FIXME: join stutfz
+	if (vals.at(0) == "EVAL" && vals.length() > 1) {
+	    qDebug() << "Evaling JS: " << vals.at(1);
+	    w->evalJS(vals.at(1));
+	}
     }
 
     delete socket;
