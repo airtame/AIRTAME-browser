@@ -1,6 +1,10 @@
 #include "browser.h"
 #include <QtNetwork/QLocalSocket>
 #include <QFileInfo>
+extern "C" {
+#include <sys/types.h>
+#include <sys/stat.h>
+}
 
 #define TIME_OUT                (500)    // 500ms
 
@@ -48,6 +52,7 @@ void BrowserApplication::_newLocalConnection() {
 }
 
 void BrowserApplication::_newLocalServer() {
+    mode_t last_mode = umask(0);
     _localServer = new QLocalServer(this);
     connect(_localServer, SIGNAL(newConnection()), this, SLOT(_newLocalConnection()));
     if(!_localServer->listen(_serverName)) {
@@ -56,4 +61,5 @@ void BrowserApplication::_newLocalServer() {
             _localServer->listen(_serverName); // Listen again
         }
     }
+    umask(last_mode);
 }
