@@ -11,4 +11,4 @@ ExecStart=/opt/airtame-browser/airtame-browser -f -platform linuxfb
 Restart=always
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
