@@ -33,11 +33,20 @@ void BrowserApplication::_readSocket() {
             qDebug() << "Changing URL to: " << vals.at(1);
             w->setUrl(vals.at(1));
         }
-	// FIXME: join stutfz
-	if (vals.at(0) == "EVAL" && vals.length() > 1) {
-	    qDebug() << "Evaling JS: " << vals.at(1);
-	    w->evalJS(vals.at(1));
-	}
+        if (vals.at(0) == "EVAL" && vals.length() > 1) {
+            vals.removeAt(0);
+            QString fullcmd = vals.join(" ");
+            qDebug() << "Evaling JS: " << fullcmd;
+            w->evalJS(fullcmd);
+        }
+        if (vals.at(0) == "SHOW") {
+            qDebug() << "Show browser";
+            w->show();
+        }
+        if (vals.at(0) == "HIDE") {
+            qDebug() << "Hide browser";
+            w->hide();
+        }
     }
 
     delete socket;
