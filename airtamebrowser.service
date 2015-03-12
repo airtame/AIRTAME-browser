@@ -7,6 +7,7 @@ Type=simple
 #CPUSchedulingPolicy=rr
 Nice=-10
 WorkingDirectory=/opt/airtame-browser/
+ExecStartPre=/usr/bin/fbset -nonstd 859981650
 ExecStart=/opt/airtame-browser/airtame-browser -f -platform linuxfb
 Restart=always
 
