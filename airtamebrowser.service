@@ -6,6 +6,7 @@ After=network.target
 Type=simple
 #CPUSchedulingPolicy=rr
 Nice=-10
+ExecStartPre=/bin/sh -c '/usr/bin/echo 16 > /sys/class/graphics/fb0/bits_per_pixel'
 WorkingDirectory=/opt/airtame-browser/
 ExecStart=/opt/airtame-browser/airtame-browser -f -platform linuxfb
 Restart=always
