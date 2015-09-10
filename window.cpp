@@ -12,6 +12,9 @@ Window::Window(QWidget *parent)
     webView->setPage(page);
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    QWebSettings *settings = webView->page()->settings();
+    settings->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls,true);
+    settings->setAttribute(QWebSettings::LocalContentCanAccessFileUrls,true);
 }
 
 void Window::setUrl(const QUrl &url)
