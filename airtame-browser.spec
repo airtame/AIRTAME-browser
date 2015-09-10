@@ -5,7 +5,7 @@ Release:	1%{?dist}
 License:	GPL v2
 URL:		http://www.airtame.com
 BuildRequires:	gcc-c++ make
-Requires:	qt-airtame-libs fbset
+Requires:	qt-airtame-libs
 
 %define _builddir %(echo $PWD)
 
