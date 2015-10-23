@@ -7,41 +7,51 @@
 int main(int argc, char *argv[])
 {
     /* Initialize the application */
-    BrowserApplication app(argc, argv);
-    QCoreApplication::setApplicationName("airtame-browser");
-    QCoreApplication::setApplicationVersion("1.1");
+    try {
 
-    /* Parse the cmdline arguments */
-    QCommandLineParser parser;
-    parser.setApplicationDescription("AIRTAME Browser");
-    parser.addHelpOption();
-    parser.addVersionOption();
-    QCommandLineOption urlOption("u", QCoreApplication::translate("main", "URL to load on start"), QCoreApplication::translate("main", "url"));
-    parser.addOption(urlOption);
+        BrowserApplication app(argc, argv);
 
-    QCommandLineOption fullscreenOption("f",QCoreApplication::translate("main", "Set browser to be full screen"));
-    parser.addOption(fullscreenOption);
+        QCoreApplication::setApplicationName("airtame-browser");
+        QCoreApplication::setApplicationVersion("1.1");
 
-    parser.process(app);
-    bool fullscreen = parser.isSet(fullscreenOption);
+        /* Parse the cmdline arguments */
+        QCommandLineParser parser;
+        parser.setApplicationDescription("AIRTAME Browser");
+        parser.addHelpOption();
+        parser.addVersionOption();
+        QCommandLineOption urlOption("u", QCoreApplication::translate("main", "URL to load on start"), QCoreApplication::translate("main", "url"));
+        parser.addOption(urlOption);
 
-    /* Setup the window */
-    Window window;
-    window.setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-    if (parser.isSet(urlOption)) {
-        window.setUrl(QUrl(parser.value(urlOption)));
-    } else {
-        window.setUrl(QUrl("http://localhost/splash/redir.php"));
+        QCommandLineOption fullscreenOption("f",QCoreApplication::translate("main", "Set browser to be full screen"));
+        parser.addOption(fullscreenOption);
+
+        parser.process(app);
+        bool fullscreen = parser.isSet(fullscreenOption);
+
+        /* Setup the window */
+        Window window;
+        window.setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+        if (parser.isSet(urlOption)) {
+            window.setUrl(QUrl(parser.value(urlOption)));
+        } else {
+            window.setUrl(QUrl("http://localhost/splash/redir.php"));
+        }
+
+        if (fullscreen) {
+            window.showFullScreen();
+        } else {
+            window.show();
+        }
+
+        /* Give the window ref to the app */
+        app.mainWindow = &window;
+
+        /* Execute the app */
+        return app.exec();
+
+    } catch (const std::bad_alloc & exception) {
+        qDebug() <<__FILE__<< __LINE__<< " bad_alloc caught: " << exception.what();
+        return -1; //exit the application in case of memory allocation failure
     }
 
-    if (fullscreen) {
-        window.showFullScreen();
-    } else {
-        window.show();
-    }
-
-    /* Give the window ref to the app */
-    app.w = &window;
-    /* Execute the app */
-    return app.exec();
 }
