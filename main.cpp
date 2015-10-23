@@ -41,7 +41,8 @@ int main(int argc, char *argv[])
     }
 
     /* Give the window ref to the app */
-    app.w = &window;
+    app.mainWindow = &window;
+
     /* Execute the app */
     return app.exec();
 }

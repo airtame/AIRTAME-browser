@@ -1,49 +1,48 @@
-#include "browser.h"
-#include <QtNetwork/QLocalSocket>
-#include <QFileInfo>
 extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
 }
+#include <zmq.hpp>
+#include <QtNetwork/QLocalSocket>
+#include <QFileInfo>
+#include "browser.h"
+#include "zmqserver.h"
 
 #define TIME_OUT                (500)    // 500ms
 
 BrowserApplication::BrowserApplication(int &argc, char **argv)
     : QApplication(argc, argv)
-    , w(NULL)
-    , _localServer(NULL) {
+    , mainWindow(NULL)
+    , _localServer(NULL)
+{
 
     // The application name as the name of the LocalServer
     _serverName = QFileInfo(QCoreApplication::applicationFilePath()).fileName();
+#ifdef ZMQ_VERSION
+    #pragma message "zmq server"
+    _activateZmqServer();
+
+#else
+    #pragma message "socket server"
     _newLocalServer();
+#endif
 }
 
-void BrowserApplication::_readSocket() {
+void BrowserApplication::_readSocket()
+{
     QLocalSocket *socket = (QLocalSocket*)sender();
     //Read all data on the socket & store it on a QByteArray
     QByteArray block = socket->readAll();
+
     QString cmd(block);
-
-    QStringList pieces = cmd.split("\n");
-
-    // Process the commands coming through the socket!
-    foreach(QString line, pieces) {
-        QStringList vals = line.split(" ");
-        if (vals.at(0) == "URL" && vals.length() > 1) {
-            qDebug() << "Changing URL to: " << vals.at(1);
-            w->setUrl(vals.at(1));
-        }
-	// FIXME: join stutfz
-	if (vals.at(0) == "EVAL" && vals.length() > 1) {
-	    qDebug() << "Evaling JS: " << vals.at(1);
-	    w->evalJS(vals.at(1));
-	}
-    }
+    //process command
+    mainWindow->processCommand(cmd);
 
     delete socket;
 }
 
-void BrowserApplication::_newLocalConnection() {
+void BrowserApplication::_newLocalConnection()
+{
     QLocalSocket *socket = _localServer->nextPendingConnection();
     if(socket) {
         connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
@@ -51,7 +50,8 @@ void BrowserApplication::_newLocalConnection() {
     }
 }
 
-void BrowserApplication::_newLocalServer() {
+void BrowserApplication::_newLocalServer()
+{
     mode_t last_mode = umask(0);
     _localServer = new QLocalServer(this);
     connect(_localServer, SIGNAL(newConnection()), this, SLOT(_newLocalConnection()));
@@ -62,4 +62,26 @@ void BrowserApplication::_newLocalServer() {
         }
     }
     umask(last_mode);
+}
+
+void BrowserApplication::_activateZmqServer()
+{
+
+    /* Start the zmq server */
+    thread = new QThread();
+    zmqServer = new ZMQServer();
+    zmqServer->moveToThread(thread);
+    //bind the signal emitted from the zmq Server to the application slot
+    QObject::connect(zmqServer,SIGNAL(processData(QString)),this,SLOT(_processDataFromZmqServer(QString)));
+
+    QObject::connect(thread, SIGNAL(started()), zmqServer, SLOT(processRequest()));
+    QObject::connect(zmqServer, SIGNAL(finished()), thread, SLOT(quit()));
+    QObject::connect(zmqServer, SIGNAL(finished()), zmqServer, SLOT(deleteLater()));
+    QObject::connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+    thread->start();
+}
+
+void BrowserApplication::_processDataFromZmqServer(QString data)
+{
+    mainWindow->processCommand(data);
 }
