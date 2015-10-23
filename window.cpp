@@ -15,10 +15,34 @@ Window::Window(QWidget *parent)
 
 void Window::setUrl(const QUrl &url)
 {
-    webView->setUrl(url);
+
+   webView->setUrl(url);
+
 }
 
 void Window::evalJS(const QString jscmd)
 {
+
     webView->page()->mainFrame()->evaluateJavaScript(jscmd);
+}
+
+void Window::processCommand(QString cmd)
+{
+
+    QStringList pieces = cmd.split("\n");
+
+    // Process the commands coming through the socket!
+    foreach(QString line, pieces) {
+        QStringList vals = line.split(" ");
+        if (vals.at(0) == "URL" && vals.length() > 1) {
+            qDebug() << "Changing URL to: " << vals.at(1);
+            setUrl(vals.at(1));
+        }
+        // FIXME: join stutfz
+        if (vals.at(0) == "EVAL" && vals.length() > 1) {
+            qDebug() << "Evaling JS: " << vals.at(1);
+            evalJS(vals.at(1));
+        }
+    }
+
 }

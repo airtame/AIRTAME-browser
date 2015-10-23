@@ -14,6 +14,7 @@ public:
     Window(QWidget *parent = 0);
     void setUrl(const QUrl &url);
     void evalJS(const QString jscmd);
+    void processCommand(QString command);
 };
 //! [Window class definition]
 
