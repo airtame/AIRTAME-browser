@@ -20,10 +20,37 @@ Window::Window(QWidget *parent)
 void Window::setUrl(const QUrl &url)
 {
 
+<<<<<<< HEAD   (83a062 B/browser: Fixed merge code removal)
     webView->setUrl(url);
+=======
+   webView->setUrl(url);
+
+>>>>>>> BRANCH (c5bbf5 F/browser: Added support for zmq library + refactoring)
 }
 
 void Window::evalJS(const QString jscmd)
 {
+
     webView->page()->mainFrame()->evaluateJavaScript(jscmd);
+}
+
+void Window::processCommand(QString cmd)
+{
+
+    QStringList pieces = cmd.split("\n");
+
+    // Process the commands coming through the socket!
+    foreach(QString line, pieces) {
+        QStringList vals = line.split(" ");
+        if (vals.at(0) == "URL" && vals.length() > 1) {
+            qDebug() << "Changing URL to: " << vals.at(1);
+            setUrl(vals.at(1));
+        }
+        // FIXME: join stutfz
+        if (vals.at(0) == "EVAL" && vals.length() > 1) {
+            qDebug() << "Evaling JS: " << vals.at(1);
+            evalJS(vals.at(1));
+        }
+    }
+
 }
