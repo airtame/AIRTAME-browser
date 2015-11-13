@@ -41,11 +41,19 @@ void Window::processCommand(QString cmd)
             qDebug() << "Changing URL to: " << vals.at(1);
             setUrl(vals.at(1));
         }
-        // FIXME: join stutfz
         if (vals.at(0) == "EVAL" && vals.length() > 1) {
-            qDebug() << "Evaling JS: " << vals.at(1);
-            evalJS(vals.at(1));
+            vals.removeAt(0);
+            QString fullcmd = vals.join(" ");
+            qDebug() << "Evaling JS: " << fullcmd;
+            evalJS(fullcmd);
+        }
+        if (vals.at(0) == "SHOW") {
+            qDebug() << "Show browser";
+            show();
+        }
+        if (vals.at(0) == "HIDE") {
+            qDebug() << "Hide browser";
+            hide();
         }
     }
-
 }
