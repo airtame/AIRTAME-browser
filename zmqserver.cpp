@@ -1,8 +1,10 @@
+extern "C" {
 #include <sys/stat.h>
 #include <unistd.h>
+}
 #include <QDebug>
 #include <QThread>
-#include <zmq.hpp>
+#include "zmq.hpp"
 #include "zmqserver.h"
 
 #define IO_THREADS_NR 1

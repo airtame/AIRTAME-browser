@@ -12,7 +12,8 @@ Window::Window(QWidget *parent)
     webView->setPage(page);
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
-    QWebSettings *settings = webView->page()->settings();
+    //set the webpage settings globally
+    QWebSettings *settings = QWebSettings::globalSettings();
     settings->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls,true);
     settings->setAttribute(QWebSettings::LocalContentCanAccessFileUrls,true);
 }

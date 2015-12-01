@@ -2,12 +2,13 @@ QT       += webkitwidgets widgets
 LIBS     += -lzmq
 FORMS     = window.ui
 HEADERS   = window.h \
-    webpage.h \
     browser.h \
-    zmqserver.h
+    zmqserver.h \
+    webpage.h \
+    zmq.hpp
 SOURCES   = main.cpp \
             window.cpp \
-    webpage.cpp \
     browser.cpp \
-    zmqserver.cpp
+    zmqserver.cpp \
+    webpage.cpp
 
