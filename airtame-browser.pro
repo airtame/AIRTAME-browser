@@ -3,9 +3,12 @@ LIBS     += -lzmq
 FORMS     = window.ui
 HEADERS   = window.h \
     browser.h \
-    zmqserver.h
+    zmqserver.h \
+    webpage.h \
+    zmq.hpp
 SOURCES   = main.cpp \
             window.cpp \
     browser.cpp \
-    zmqserver.cpp
+    zmqserver.cpp \
+    webpage.cpp
 
