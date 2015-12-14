@@ -28,6 +28,8 @@ BrowserApplication::BrowserApplication(int &argc, char **argv)
     #pragma message "socket server"
     _newLocalServer();
 #endif
+
+
 }
 
 void BrowserApplication::_readSocket()
@@ -38,7 +40,7 @@ void BrowserApplication::_readSocket()
 
     QString cmd(block);
     //process command
-    mainWindow->processCommand(cmd);
+   _processDataFromServer(cmd);
 
     delete socket;
 }
@@ -92,7 +94,7 @@ void BrowserApplication::_activateZmqServer()
 
     zmqServer->moveToThread(thread);
     //bind the signal emitted from the zmq Server to the application slot
-    QObject::connect(zmqServer,SIGNAL(processData(QString)),this,SLOT(_processDataFromZmqServer(QString)));
+    QObject::connect(zmqServer,SIGNAL(processData(QString)),this,SLOT(_processDataFromServer(QString)));
 
     QObject::connect(thread, SIGNAL(started()), zmqServer, SLOT(processRequest()));
     QObject::connect(zmqServer, SIGNAL(finished()), thread, SLOT(quit()));
@@ -101,7 +103,31 @@ void BrowserApplication::_activateZmqServer()
     thread->start();
 }
 
-void BrowserApplication::_processDataFromZmqServer(QString data)
+void BrowserApplication::_processDataFromServer(QString cmd)
 {
-    mainWindow->processCommand(data);
+
+    QStringList pieces = cmd.split("\n");
+
+    // Process the commands coming through the socket!
+    foreach(QString line, pieces) {
+        QStringList vals = line.split(" ");
+        if (vals.at(0) == "URL" && vals.length() > 1) {
+            qDebug() << "Changing URL to: " << vals.at(1);
+           mainWindow -> setUrl(vals.at(1));
+        }
+        if (vals.at(0) == "EVAL" && vals.length() > 1) {
+            vals.removeAt(0);
+            QString fullcmd = vals.join(" ");
+            qDebug() << "Evaling JS: " << fullcmd;
+            mainWindow->evalJS(fullcmd);
+        }
+        if (vals.at(0) == "SHOW") {
+            qDebug() << "Show browser";
+            mainWindow->show();
+        }
+        if (vals.at(0) == "HIDE") {
+            qDebug() << "Hide browser";
+            mainWindow->hide();
+        }
+    }
 }

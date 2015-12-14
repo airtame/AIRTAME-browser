@@ -1,4 +1,4 @@
-QT       += webkitwidgets widgets webenginewidgets
+QT       +=  webenginewidgets webkitwidgets widgets
 LIBS     += -lzmq
 FORMS     = window.ui
 HEADERS   = window.h \
@@ -6,11 +6,15 @@ HEADERS   = window.h \
     zmqserver.h \
     webpage.h \
     zmq.hpp \
-    customwebenginepage.h
+    customwebenginepage.h \
+    airtamewebengineview.h \
+    evaljsstrategy.h
 SOURCES   = main.cpp \
             window.cpp \
     browser.cpp \
     zmqserver.cpp \
     webpage.cpp \
-    customwebenginepage.cpp
+    customwebenginepage.cpp \
+    airtamewebengineview.cpp \
+    evaljsstrategy.cpp
 
