@@ -1,4 +1,4 @@
-QT       +=  webenginewidgets webkitwidgets widgets
+QT       +=  widgets webenginewidgets webkitwidgets
 LIBS     += -lzmq
 FORMS     = window.ui
 HEADERS   = window.h \

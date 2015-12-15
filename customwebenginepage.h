@@ -8,8 +8,8 @@ class CustomWebenginePage : public QWebEnginePage
 public:
     CustomWebenginePage();
 protected:
-    virtual bool certificateError(const QWebEngineCertificateError & certificateError);
-    virtual void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString & message, int lineNumber, const QString & sourceID);
+    bool certificateError(const QWebEngineCertificateError & certificateError) Q_DECL_OVERRIDE;
+    void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString & message, int lineNumber, const QString & sourceID) Q_DECL_OVERRIDE;
 };
 
 #endif // CUSTOMWEBENGINEPAGE_H

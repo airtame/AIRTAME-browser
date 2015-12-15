@@ -5,7 +5,7 @@
 class EvalJsStrategy
 {
 public:
-   EvalJsStrategy();
+    EvalJsStrategy();
     virtual ~EvalJsStrategy();
     virtual void evalJS(const QString jscmd) = 0;
 

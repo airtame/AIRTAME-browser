@@ -21,11 +21,11 @@ BrowserApplication::BrowserApplication(int &argc, char **argv)
     // The application name as the name of the LocalServer
     _serverName = QFileInfo(QCoreApplication::applicationFilePath()).fileName();
 #ifdef ZMQ_VERSION
-    #pragma message "zmq server"
+#pragma message "zmq server"
     _activateZmqServer();
 
 #else
-    #pragma message "socket server"
+#pragma message "socket server"
     _newLocalServer();
 #endif
 
@@ -40,7 +40,7 @@ void BrowserApplication::_readSocket()
 
     QString cmd(block);
     //process command
-   _processDataFromServer(cmd);
+    _processDataFromServer(cmd);
 
     delete socket;
 }
@@ -113,7 +113,7 @@ void BrowserApplication::_processDataFromServer(QString cmd)
         QStringList vals = line.split(" ");
         if (vals.at(0) == "URL" && vals.length() > 1) {
             qDebug() << "Changing URL to: " << vals.at(1);
-           mainWindow -> setUrl(vals.at(1));
+            mainWindow -> setUrl(vals.at(1));
         }
         if (vals.at(0) == "EVAL" && vals.length() > 1) {
             vals.removeAt(0);

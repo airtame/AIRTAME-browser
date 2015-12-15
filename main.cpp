@@ -29,13 +29,13 @@ int main(int argc, char *argv[])
         parser.process(app);
         bool fullscreen = parser.isSet(fullscreenOption);
 
-        #ifdef QWEBENGINEVIEW_H
-         #pragma message "webengine view"
+#ifdef QWEBENGINEVIEW_H
+#pragma message "webengine view"
         AirtameWebEngineView window;
-        #else
+#else
         /* Setup the window */
         Window window;
-        #endif
+#endif
 
         window.setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
         if (parser.isSet(urlOption)) {

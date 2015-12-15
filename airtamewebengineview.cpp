@@ -4,11 +4,18 @@
 #include "airtamewebengineview.h"
 #include "customwebenginepage.h"
 
-AirtameWebEngineView::AirtameWebEngineView(QWidget* parent):QWebEngineView(parent)
+AirtameWebEngineView::AirtameWebEngineView(QWidget* parent) : QWebEngineView(parent)
 {
+
+    //set the webpage settings globally
+    QWebEngineSettings *settings = QWebEngineSettings::globalSettings();
+    settings->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls,true);
+    settings->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls,true);
+
     CustomWebenginePage* page = new CustomWebenginePage();
     this->setPage(page);
 
+    //log when the webengine render process finishes
     connect(this, &QWebEngineView::renderProcessTerminated,
             [=](QWebEnginePage::RenderProcessTerminationStatus termStatus, int statusCode) {
         const char *status = "";
@@ -27,29 +34,16 @@ AirtameWebEngineView::AirtameWebEngineView(QWidget* parent):QWebEngineView(paren
             break;
         }
 
-        qDebug() << "Render process exited with code" << statusCode << status;
+        qDebug() << "Render process exited with code : " << statusCode << status;
+        //reload the page
         QTimer::singleShot(0, [this]{reload(); });
-
     });
-
-
-    //set the webpage settings globally
-    QWebEngineSettings *settings = QWebEngineSettings::globalSettings();
-    settings->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls,true);
-    settings->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls,true);
-
-
 }
 
 
 void AirtameWebEngineView::evalJS(const QString jscmd)
 {
     this->page()->runJavaScript(jscmd, [](const QVariant &result){ qDebug() << result;});
-}
-
-void AirtameWebEngineView::showEvent(QShowEvent *event) {
-
-
 }
 
 

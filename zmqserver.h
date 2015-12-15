@@ -19,7 +19,7 @@ signals:
     void processData(QString data);
 
 public slots:
-     void processRequest();
+    void processRequest();
 
 };
 

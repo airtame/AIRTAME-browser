@@ -18,9 +18,6 @@ Window::Window(QWidget *parent)
     QWebSettings *settings = QWebSettings::globalSettings();
     settings->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls,true);
     settings->setAttribute(QWebSettings::LocalContentCanAccessFileUrls,true);
-
-
-
 }
 
 void Window::setUrl(const QUrl &url)

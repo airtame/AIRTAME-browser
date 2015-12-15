@@ -12,7 +12,7 @@ class Window : public QWidget, private Ui::Window, public EvalJsStrategy {
 public:
     Window(QWidget *parent = 0);
     void setUrl(const QUrl &url);
-    void evalJS(const QString jscmd);
+    void evalJS(const QString jscmd) Q_DECL_OVERRIDE;
 
 };
 //! [Window class definition]

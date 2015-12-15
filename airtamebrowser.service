@@ -11,7 +11,7 @@ CPUAccounting=true
 CPUShares=1024
 CPUQuota=80%
 WorkingDirectory=/opt/airtame-browser/
-ExecStart=/opt/airtame-browser/airtame-browser -f -platform linuxfb
+ExecStart=/opt/airtame-browser/airtame-browser -f 
 Restart=always
 
 [Install]
