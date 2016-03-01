@@ -11,6 +11,8 @@ AirtameWebEngineView::AirtameWebEngineView(QWidget* parent) : QWebEngineView(par
     QWebEngineSettings *settings = QWebEngineSettings::globalSettings();
     settings->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls,true);
     settings->setAttribute(QWebEngineSettings::LocalContentCanAccessFileUrls,true);
+    settings->setAttribute(QWebEngineSettings::PluginsEnabled,true);
+    settings->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
 
     CustomWebenginePage* page = new CustomWebenginePage();
     this->setPage(page);
@@ -36,7 +38,10 @@ AirtameWebEngineView::AirtameWebEngineView(QWidget* parent) : QWebEngineView(par
 
         qDebug() << "Render process exited with code : " << statusCode << status;
         //reload the page
-        QTimer::singleShot(0, [this]{reload(); });
+      //  QTimer::singleShot(0, [=]page()->triggerAction(QWebEngineView::reload)); });
+   //     this->page()->triggerAction(QWebEngineView::Rel);
+
+        QTimer::singleShot(0, [this] { reload(); });
     });
 }
 
